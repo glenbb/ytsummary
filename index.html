@@ -3,8 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Breakdown: How Web Browsers Work</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Video Breakdown</title>
+    <style>
+        /* Color Palette & Variables */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --node-1: #f43f5e;
+            --node-2: #8b5cf6;
+            --node-3: #0ea5e9;
+            --node-4: #10b981;
+            --node-5: #f59e0b;
+        }
+
+        /* Global Reset & Typography */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+        h1, h2, h3 { font-weight: 700; line-height: 1.2; margin-bottom: 1rem; color: #1a202c; }
+        p { margin-bottom: 1rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 3rem; }
+        header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* Layout */
+        .grid-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        @media (max-width: 800px) { .grid-layout { grid-template-columns: 1fr; } }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 2rem; }
+
+        /* Audio Section */
+        .audio-section { text-align: center; }
+        .audio-controls { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+        select { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 1rem; }
+        .btn { padding: 0.6rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; color: white; transition: 0.2s; }
+        .btn:active { transform: translateY(2px); }
+        .btn.play { background-color: var(--primary); }
+        .btn.pause { background-color: #f59e0b; }
+        .btn.stop { background-color: #ef4444; }
+        .status-text { margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); font-style: italic; }
+
+        /* Flowchart */
+        .flowchart { display: flex; flex-direction: column; align-items: center; padding: 1rem 0; }
+        .node { color: white; padding: 1.2rem; border-radius: 8px; width: 100%; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .node h3 { color: white; margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .node p { margin: 0; font-size: 0.9rem; opacity: 0.9; }
+        .color-1 { background: var(--node-1); }
+        .color-2 { background: var(--node-2); }
+        .color-3 { background: var(--node-3); }
+        .color-4 { background: var(--node-4); }
+        .color-5 { background: var(--node-5); }
+        .arrow { width: 4px; height: 30px; background-color: #cbd5e0; position: relative; margin: 5px 0; }
+        .arrow::after { content: ''; position: absolute; bottom: -5px; left: -6px; border-width: 8px 8px 0; border-style: solid; border-color: #cbd5e0 transparent transparent transparent; }
+
+        /* Text Content */
+        .transcript-content p { text-indent: 1.5rem; margin-bottom: 1.2rem; color: #4a5568; }
+        .summary-card p { font-size: 1.1rem; color: #2b6cb0; background: #ebf8ff; padding: 1.5rem; border-left: 4px solid #3182ce; border-radius: 4px; }
+    </style>
 </head>
 <body>
     <header>
@@ -69,295 +132,103 @@
                 <div class="card transcript-card">
                     <h2>Full Transcript</h2>
                     <div id="transcriptText" class="transcript-content">
-                        <p>"Welcome back to the channel. Today we're going to dive into exactly what happens behind the scenes when you type a web address into your browser and hit enter. It feels instant, but there is a massive journey happening in milliseconds."</p>
-                        <p>"Step one is the URL. When you type 'example.com', your computer doesn't actually know where that is. Computers communicate using IP addresses, which are strings of numbers. So, the browser has to look up this address. This brings us to step two: DNS Resolution. The Domain Name System acts like the phonebook of the internet. Your browser checks its cache, your OS, your router, and finally a DNS server until it finds the matching IP address."</p>
-                        <p>"Now that we have the IP address, we move to step three: The TCP connection. The browser uses the internet protocol to route packets to the server, and establishes a connection using a process called the TCP three-way handshake—essentially saying 'Hello, are you there?', the server replying 'Yes, I am', and the browser saying 'Great, let's talk'."</p>
-                        <p>"Step four is the HTTP Request. Now that the connection is open, your browser sends a GET request to the server, asking for the specific web page. The server processes this request and sends back a response, usually starting with an HTML document."</p>
-                        <p>"Finally, step five: Rendering. The browser receives the HTML and starts reading it. If it sees links to CSS stylesheets or JavaScript files, it requests those too. It builds the Document Object Model, calculates the styles, and paints the pixels onto your screen. And that is how a web browser works. Thanks for watching!"</p>
+                        <p>Welcome back to the channel. Today we're going to dive into exactly what happens behind the scenes when you type a web address into your browser and hit enter. It feels instant, but there is a massive journey happening in milliseconds.</p>
+                        <p>Step one is the URL. When you type 'example.com', your computer doesn't actually know where that is. Computers communicate using IP addresses, which are strings of numbers. So, the browser has to look up this address. This brings us to step two: DNS Resolution. The Domain Name System acts like the phonebook of the internet. Your browser checks its cache, your OS, your router, and finally a DNS server until it finds the matching IP address.</p>
+                        <p>Now that we have the IP address, we move to step three: The TCP connection. The browser uses the internet protocol to route packets to the server, and establishes a connection using a process called the TCP three-way handshake—essentially saying 'Hello, are you there?', the server replying 'Yes, I am', and the browser saying 'Great, let's talk'.</p>
+                        <p>Step four is the HTTP Request. Now that the connection is open, your browser sends a GET request to the server, asking for the specific web page. The server processes this request and sends back a response, usually starting with an HTML document.</p>
+                        <p>Finally, step five: Rendering. The browser receives the HTML and starts reading it. If it sees links to CSS stylesheets or JavaScript files, it requests those too. It builds the Document Object Model, calculates the styles, and paints the pixels onto your screen. And that is how a web browser works. Thanks for watching!</p>
                     </div>
                 </div>
             </section>
         </div>
     </main>
-    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!('speechSynthesis' in window)) {
+                alert("Sorry, your browser doesn't support text to speech!");
+                return;
+            }
+
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const textSelector = document.getElementById('textSelector');
+            const statusText = document.getElementById('audioStatus');
+            
+            let sentences = [];
+            let currentSentenceIndex = 0;
+
+            function getTextToRead() {
+                const elementId = textSelector.value === 'summary' ? 'summaryText' : 'transcriptText';
+                return document.getElementById(elementId).innerText;
+            }
+
+            // Fix for the long text bug: chunking text into sentences
+            function prepareSpeechChunks(text) {
+                // Split text by common punctuation marks
+                sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+                currentSentenceIndex = 0;
+            }
+
+            function speakNextChunk() {
+                if (currentSentenceIndex < sentences.length) {
+                    let utterance = new SpeechSynthesisUtterance(sentences[currentSentenceIndex].trim());
+                    utterance.rate = 0.95;
+                    
+                    utterance.onend = () => {
+                        currentSentenceIndex++;
+                        speakNextChunk(); // Chain the next sentence
+                    };
+
+                    utterance.onerror = (e) => {
+                        console.error("Speech error:", e);
+                        statusText.innerText = "Error playing audio.";
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                    
+                    if(currentSentenceIndex === 0) {
+                        statusText.innerText = "Playing...";
+                    }
+                } else {
+                    statusText.innerText = "Finished playing.";
+                }
+            }
+
+            playBtn.addEventListener('click', () => {
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                    statusText.innerText = "Playing...";
+                } else if (!window.speechSynthesis.speaking) {
+                    prepareSpeechChunks(getTextToRead());
+                    speakNextChunk();
+                }
+            });
+
+            pauseBtn.addEventListener('click', () => {
+                if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+                    window.speechSynthesis.pause();
+                    statusText.innerText = "Paused.";
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                window.speechSynthesis.cancel();
+                currentSentenceIndex = sentences.length; // Stop the chain
+                statusText.innerText = "Stopped.";
+            });
+
+            textSelector.addEventListener('change', () => {
+                window.speechSynthesis.cancel();
+                currentSentenceIndex = sentences.length; // Stop the chain
+                statusText.innerText = "Selection changed. Ready to play.";
+            });
+            
+            window.addEventListener('beforeunload', () => {
+                window.speechSynthesis.cancel();
+            });
+        });
+    </script>
 </body>
 </html>
-<style>
-  /* Color Palette & Variables */
-:root {
-    --bg-color: #f4f7f6;
-    --text-main: #2d3748;
-    --text-muted: #718096;
-    --card-bg: #ffffff;
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
-    
-    /* Flowchart Node Colors */
-    --node-1: #f43f5e; /* Rose */
-    --node-2: #8b5cf6; /* Violet */
-    --node-3: #0ea5e9; /* Sky Blue */
-    --node-4: #10b981; /* Emerald */
-    --node-5: #f59e0b; /* Amber */
-}
-
-/* Global Reset & Typography */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    /* Using native system fonts for great typography without CDNs */
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    line-height: 1.6;
-    padding: 2rem 1rem;
-}
-
-h1, h2, h3 {
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    color: #1a202c;
-}
-
-p {
-    margin-bottom: 1rem;
-}
-
-/* Layout */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-header p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-}
-
-.grid-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
-}
-
-@media (max-width: 800px) {
-    .grid-layout {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Cards */
-.card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    margin-bottom: 2rem;
-}
-
-/* Audio Section */
-.audio-section {
-    text-align: center;
-}
-
-.audio-controls {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-}
-
-select {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: 1px solid #cbd5e0;
-    font-family: inherit;
-    font-size: 1rem;
-    background: white;
-}
-
-.btn {
-    padding: 0.6rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    color: white;
-}
-
-.btn:active {
-    transform: translateY(2px);
-}
-
-.btn.play { background-color: var(--primary); }
-.btn.play:hover { background-color: var(--primary-hover); }
-.btn.pause { background-color: #f59e0b; }
-.btn.pause:hover { background-color: #d97706; }
-.btn.stop { background-color: #ef4444; }
-.btn.stop:hover { background-color: #dc2626; }
-
-.status-text {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    font-style: italic;
-}
-
-/* Flowchart */
-.flowchart {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem 0;
-}
-
-.node {
-    color: white;
-    padding: 1.2rem;
-    border-radius: 8px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    position: relative;
-}
-
-.node h3 {
-    color: white;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-}
-
-.node p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
-
-.color-1 { background: var(--node-1); }
-.color-2 { background: var(--node-2); }
-.color-3 { background: var(--node-3); }
-.color-4 { background: var(--node-4); }
-.color-5 { background: var(--node-5); }
-
-/* Flowchart Arrows */
-.arrow {
-    width: 4px;
-    height: 30px;
-    background-color: #cbd5e0;
-    position: relative;
-    margin: 5px 0;
-}
-
-.arrow::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: -6px;
-    border-width: 8px 8px 0;
-    border-style: solid;
-    border-color: #cbd5e0 transparent transparent transparent;
-}
-
-/* Text Content */
-.transcript-content p {
-    text-indent: 1.5rem;
-    margin-bottom: 1.2rem;
-    color: #4a5568;
-}
-
-.summary-card p {
-    font-size: 1.1rem;
-    color: #2b6cb0;
-    background: #ebf8ff;
-    padding: 1.5rem;
-    border-left: 4px solid #3182ce;
-    border-radius: 4px;
-}
-</style>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Check if browser supports the Web Speech API
-    if (!('speechSynthesis' in window)) {
-        alert("Sorry, your browser doesn't support text to speech!");
-        return;
-    }
-
-    const playBtn = document.getElementById('playBtn');
-    const pauseBtn = document.getElementById('pauseBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const textSelector = document.getElementById('textSelector');
-    const statusText = document.getElementById('audioStatus');
-    
-    // Store reference to the speech utterance
-    let utterance = new SpeechSynthesisUtterance();
-    
-    // Function to get the text based on dropdown selection
-    function getTextToRead() {
-        if (textSelector.value === 'summary') {
-            return document.getElementById('summaryText').innerText;
-        } else {
-            return document.getElementById('transcriptText').innerText;
-        }
-    }
-
-    // Play/Resume button
-    playBtn.addEventListener('click', () => {
-        if (window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-            statusText.innerText = "Playing...";
-        } else if (!window.speechSynthesis.speaking) {
-            utterance.text = getTextToRead();
-            
-            // Adjust voice settings for better listening experience
-            utterance.rate = 0.95; 
-            utterance.pitch = 1;
-            
-            // Event listeners for UI updates
-            utterance.onend = () => { statusText.innerText = "Finished playing."; };
-            utterance.onerror = () => { statusText.innerText = "Error playing audio."; };
-            
-            window.speechSynthesis.speak(utterance);
-            statusText.innerText = "Playing...";
-        }
-    });
-
-    // Pause button
-    pauseBtn.addEventListener('click', () => {
-        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-            window.speechSynthesis.pause();
-            statusText.innerText = "Paused.";
-        }
-    });
-
-    // Stop button
-    stopBtn.addEventListener('click', () => {
-        if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
-            window.speechSynthesis.cancel();
-            statusText.innerText = "Stopped.";
-        }
-    });
-
-    // If user changes the dropdown while it's reading, stop current speech
-    textSelector.addEventListener('change', () => {
-        window.speechSynthesis.cancel();
-        statusText.innerText = "Selection changed. Ready to play.";
-    });
-    
-    // Cleanup if the user leaves the page while audio is playing
-    window.addEventListener('beforeunload', () => {
-        window.speechSynthesis.cancel();
-    });
-});
-</script>
