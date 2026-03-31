@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Analyzer</title>
+    <title>Real YouTube Analyzer</title>
     <style>
-/* Base Resets and Typography */
-:root {
+
+        :root {
     --text-main: #333;
     --text-light: #555;
     --primary: #667eea;
@@ -14,16 +14,10 @@
     --card-bg: rgba(255, 255, 255, 0.95);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Full App Gradient Background */
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    /* Beautiful full-page gradient */
+    font-family: system-ui, sans-serif;
     background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
     background-attachment: fixed;
     color: var(--text-main);
@@ -31,186 +25,57 @@ body {
     padding: 2rem;
 }
 
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
+.error { color: #ff3333; font-weight: bold; margin-top: 10px; background: rgba(255,255,255,0.8); padding: 5px; border-radius: 5px; display: inline-block;}
 
-/* Header & Inputs */
-.header {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #fff;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-}
+.header { text-align: center; margin-bottom: 2rem; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.2); }
+.header h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
 
-.header h1 {
-    font-size: 2.8rem;
-    margin-bottom: 0.5rem;
-}
+.input-group { display: flex; justify-content: center; gap: 10px; margin-top: 1.5rem; }
+input[type="text"] { width: 60%; max-width: 500px; padding: 14px 20px; border: none; border-radius: 8px; font-size: 1rem; outline: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+button { padding: 14px 24px; background-color: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: 600; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+button:hover { transform: translateY(-2px); }
 
-.input-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 1.5rem;
-}
+.container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-input[type="text"] {
-    width: 60%;
-    max-width: 500px;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    outline: none;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
+.card { background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
+.card h2 { margin-bottom: 1rem; font-size: 1.4rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; color: var(--primary); }
+.scroll-box { max-height: 250px; overflow-y: auto; padding-right: 10px; color: var(--text-light); margin-bottom: 1.5rem; font-size: 0.95rem; white-space: pre-wrap; }
 
-button {
-    padding: 14px 24px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
+.audio-btn { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.audio-controls { text-align: center; }
+.control-btn { background-color: #f0f0f0; color: #333; margin: 0 5px; }
+.stop-btn { background-color: #ff5252; color: white; }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-/* Layout & Cards */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-}
-
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.card {
-    background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    backdrop-filter: blur(10px);
-}
-
-.card h2 {
-    margin-bottom: 1rem;
-    font-size: 1.4rem;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 0.5rem;
-    color: var(--primary);
-}
-
-.scroll-box {
-    max-height: 250px;
-    overflow-y: auto;
-    padding-right: 10px;
-    color: var(--text-light);
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-}
-
-/* Audio Controls */
-.audio-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.audio-controls {
-    text-align: center;
-}
-
-.control-btn {
-    background-color: #f0f0f0;
-    color: #333;
-    margin: 0 5px;
-}
-
-.stop-btn {
-    background-color: #ff5252;
-    color: white;
-}
-
-/* Complementing Solid Color Flowchart */
-.flowchart {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 20px 0;
-}
-
-.flow-node {
-    /* Complementing deep blue/indigo */
-    background: #4a5568; 
-    color: #ffffff;
-    padding: 15px 25px;
-    border-radius: 8px;
-    font-weight: 500;
-    text-align: center;
-    width: 80%;
-    max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    position: relative;
-    border: 2px solid #2d3748;
-}
-
-/* Down arrow natively in CSS */
-.flow-node:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    bottom: -22px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 10px;
-    border-style: solid;
-    border-color: #4a5568 transparent transparent transparent;
-}
+.flowchart { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px 0; }
+.flow-node { background: #4a5568; color: #ffffff; padding: 15px 25px; border-radius: 8px; font-weight: 500; text-align: center; width: 80%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); position: relative; border: 2px solid #2d3748; }
+.flow-node:not(:last-child)::after { content: ''; position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); border-width: 10px; border-style: solid; border-color: #4a5568 transparent transparent transparent; }
     </style>
 </head>
 <body>
     <header class="header">
         <h1>Video Insight Generator</h1>
-        <p>Enter a YouTube link to get the transcript, summary, and visual flowchart.</p>
+        <p>Enter a YouTube link to fetch the REAL transcript.</p>
         <div class="input-group">
-            <input type="text" id="youtube-url" placeholder="Paste YouTube URL here...">
+            <input type="text" id="youtube-url" placeholder="Paste YouTube URL here (e.g., https://www.youtube.com/watch?v=...)">
             <button id="process-btn">Analyze Video</button>
         </div>
+        <p id="error-message" class="error hidden"></p>
     </header>
 
     <main class="container hidden" id="results-container">
         <div class="grid">
             <section class="card">
                 <h2>Full Transcript</h2>
-                <div class="scroll-box" id="transcript-text">
-                    </div>
+                <div class="scroll-box" id="transcript-text"></div>
                 <button class="audio-btn" onclick="speakText('transcript-text')">Listen to Transcript</button>
             </section>
 
             <section class="card">
                 <h2>Detailed Summary</h2>
-                <div class="scroll-box" id="summary-text">
-                    </div>
+                <div class="scroll-box" id="summary-text"></div>
                 <button class="audio-btn" onclick="speakText('summary-text')">Listen to Summary</button>
             </section>
         </div>
@@ -224,8 +89,7 @@ button:hover {
 
         <section class="card">
             <h2>Concept Flowchart</h2>
-            <div id="flowchart-container" class="flowchart">
-                </div>
+            <div id="flowchart-container" class="flowchart"></div>
         </section>
     </main>
 
@@ -233,43 +97,43 @@ button:hover {
         const synth = window.speechSynthesis;
 
 document.getElementById('process-btn').addEventListener('click', async () => {
-    const url = document.getElementById('youtube-url').value;
+    const urlInput = document.getElementById('youtube-url').value.trim();
+    const errorMsg = document.getElementById('error-message');
+    const processBtn = document.getElementById('process-btn');
     
-    if (!url) {
-        alert("Please enter a YouTube link.");
+    errorMsg.classList.add('hidden');
+
+    if (!urlInput) {
+        errorMsg.innerText = "Please enter a valid YouTube link.";
+        errorMsg.classList.remove('hidden');
         return;
     }
 
-    const processBtn = document.getElementById('process-btn');
-    processBtn.innerText = "Analyzing...";
+    processBtn.innerText = "Fetching Real Data...";
+    processBtn.disabled = true;
 
-    /* ===============================================================
-      REAL API FETCH LOGIC (Currently commented out)
-      When you build your backend (Node.js/Python), uncomment this:
-      ===============================================================
-      
-      try {
-          const response = await fetch('http://localhost:3000/api/analyze', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ videoUrl: url })
-          });
-          const realData = await response.json();
-          displayResults(realData);
-      } catch (error) {
-          alert("Error fetching data from server.");
-          console.error(error);
-      }
-    */
+    try {
+        // Calling our REAL local backend server
+        const response = await fetch('http://localhost:3000/api/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ videoUrl: urlInput })
+        });
 
-    // Using Mock Data for frontend testing until you have a backend
-    setTimeout(() => {
-        const mockData = generateMockData();
-        displayResults(mockData);
-        
-        processBtn.innerText = "Analyze Video";
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.error || "Failed to fetch data.");
+
+        displayResults(data);
         document.getElementById('results-container').classList.remove('hidden');
-    }, 1500); 
+
+    } catch (error) {
+        errorMsg.innerText = error.message;
+        errorMsg.classList.remove('hidden');
+    } finally {
+        processBtn.innerText = "Analyze Video";
+        processBtn.disabled = false;
+    }
 });
 
 function displayResults(data) {
@@ -287,63 +151,24 @@ function displayResults(data) {
     });
 }
 
-// --- SMOOTH Text-to-Speech Functions ---
-
+// Smooth Audio Playback
 function speakText(elementId) {
-    synth.cancel(); // Stop current speech
-    
+    synth.cancel(); 
     const textToRead = document.getElementById(elementId).innerText;
-    
-    if (!textToRead) {
-        alert("There is no text to read.");
-        return;
-    }
+    if (!textToRead) return;
 
-    // FIX FOR CHOPPY AUDIO: Split text into sentences (chunks)
-    // This regular expression splits text by periods, exclamation marks, or question marks
+    // Chunking text into sentences so it doesn't freeze the browser
     const chunks = textToRead.match(/[^.!?]+[.!?]+/g) || [textToRead];
-    
     chunks.forEach(chunk => {
         const utterance = new SpeechSynthesisUtterance(chunk.trim());
-        
-        utterance.rate = 0.9; // Slightly slower for better comprehension
-        utterance.pitch = 1;
-        
-        // Queue the chunks up for smooth, continuous playback
+        utterance.rate = 0.9; 
         synth.speak(utterance);
     });
 }
 
-function pauseSpeech() {
-    if (synth.speaking && !synth.paused) {
-        synth.pause();
-    }
-}
-
-function resumeSpeech() {
-    if (synth.paused) {
-        synth.resume();
-    }
-}
-
-function stopSpeech() {
-    synth.cancel();
-}
-
-// --- Mock Data Generator ---
-function generateMockData() {
-    return {
-        transcript: "Welcome to this tutorial. Today we are going to learn about photosynthesis. Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water. It generally involves the green pigment chlorophyll and generates oxygen as a byproduct. First, sunlight is captured by the leaves. Then, carbon dioxide enters the leaf through stomata. Water is absorbed from the roots. Finally, glucose is produced for energy, and oxygen is released into the air.",
-        summary: "This video explains the concept of photosynthesis. It breaks down how plants absorb sunlight, carbon dioxide, and water to produce glucose for energy and oxygen as a byproduct, highlighting the role of chlorophyll.",
-        flowchartSteps: [
-            "1. Plant leaves capture sunlight via chlorophyll",
-            "2. Leaves absorb Carbon Dioxide through stomata",
-            "3. Roots draw up Water from the soil",
-            "4. Chemical reaction creates Glucose (Energy)",
-            "5. Oxygen is released as a byproduct"
-        ]
-    };
-}
+function pauseSpeech() { if (synth.speaking && !synth.paused) synth.pause(); }
+function resumeSpeech() { if (synth.paused) synth.resume(); }
+function stopSpeech() { synth.cancel(); }
     </script>
 </body>
 </html>
