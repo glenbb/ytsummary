@@ -3,232 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Breakdown</title>
+    <title>YouTube Video Analyzer</title>
     <style>
-        /* Color Palette & Variables */
-        :root {
-            --bg-color: #f4f7f6;
-            --text-main: #2d3748;
-            --text-muted: #718096;
-            --card-bg: #ffffff;
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --node-1: #f43f5e;
-            --node-2: #8b5cf6;
-            --node-3: #0ea5e9;
-            --node-4: #10b981;
-            --node-5: #f59e0b;
-        }
 
-        /* Global Reset & Typography */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 2rem 1rem;
-        }
-        h1, h2, h3 { font-weight: 700; line-height: 1.2; margin-bottom: 1rem; color: #1a202c; }
-        p { margin-bottom: 1rem; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 3rem; }
-        header p { color: var(--text-muted); font-size: 1.1rem; }
+        /* Base Resets and Typography */
+:root {
+    --bg-color: #f4f7f6;
+    --text-main: #333;
+    --text-light: #666;
+    --primary: #4A90E2;
+    --primary-hover: #357ABD;
+    --card-bg: #ffffff;
+}
 
-        /* Layout */
-        .grid-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
-        @media (max-width: 800px) { .grid-layout { grid-template-columns: 1fr; } }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 2rem; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        /* Audio Section */
-        .audio-section { text-align: center; }
-        .audio-controls { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
-        select { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 1rem; }
-        .btn { padding: 0.6rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; color: white; transition: 0.2s; }
-        .btn:active { transform: translateY(2px); }
-        .btn.play { background-color: var(--primary); }
-        .btn.pause { background-color: #f59e0b; }
-        .btn.stop { background-color: #ef4444; }
-        .status-text { margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); font-style: italic; }
+/* Using native system fonts for great typography without CDNs */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 2rem;
+}
 
-        /* Flowchart */
-        .flowchart { display: flex; flex-direction: column; align-items: center; padding: 1rem 0; }
-        .node { color: white; padding: 1.2rem; border-radius: 8px; width: 100%; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .node h3 { color: white; margin-bottom: 0.5rem; font-size: 1.2rem; }
-        .node p { margin: 0; font-size: 0.9rem; opacity: 0.9; }
-        .color-1 { background: var(--node-1); }
-        .color-2 { background: var(--node-2); }
-        .color-3 { background: var(--node-3); }
-        .color-4 { background: var(--node-4); }
-        .color-5 { background: var(--node-5); }
-        .arrow { width: 4px; height: 30px; background-color: #cbd5e0; position: relative; margin: 5px 0; }
-        .arrow::after { content: ''; position: absolute; bottom: -5px; left: -6px; border-width: 8px 8px 0; border-style: solid; border-color: #cbd5e0 transparent transparent transparent; }
+.hidden {
+    display: none !important;
+}
 
-        /* Text Content */
-        .transcript-content p { text-indent: 1.5rem; margin-bottom: 1.2rem; color: #4a5568; }
-        .summary-card p { font-size: 1.1rem; color: #2b6cb0; background: #ebf8ff; padding: 1.5rem; border-left: 4px solid #3182ce; border-radius: 4px; }
+/* Header & Inputs */
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #4A90E2, #9013FE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1.5rem;
+}
+
+input[type="text"] {
+    width: 60%;
+    max-width: 500px;
+    padding: 12px 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: var(--primary);
+}
+
+button {
+    padding: 12px 24px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Layout & Cards */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+.card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+}
+
+.scroll-box {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+/* Audio Controls */
+.audio-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+}
+
+.audio-controls {
+    text-align: center;
+}
+
+.control-btn {
+    background-color: #eee;
+    color: #333;
+    margin: 0 5px;
+}
+
+.control-btn:hover {
+    background-color: #ddd;
+}
+
+.stop-btn {
+    background-color: #ff5252;
+    color: white;
+}
+.stop-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Custom Pure CSS Flowchart */
+.flowchart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.flow-node {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: #004d40;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* Create the down arrow between nodes natively */
+.flow-node:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px;
+    border-style: solid;
+    border-color: #ccc transparent transparent transparent;
+}
     </style>
 </head>
 <body>
-    <header>
-        <h1>Video Breakdown: How Web Browsers Work</h1>
-        <p>A comprehensive overview, visual flowchart, and audio playback.</p>
+    <header class="header">
+        <h1>Video Insight Generator</h1>
+        <p>Enter a YouTube link to get the transcript, summary, and visual flowchart.</p>
+        <div class="input-group">
+            <input type="text" id="youtube-url" placeholder="Paste YouTube URL here...">
+            <button id="process-btn">Analyze Video</button>
+        </div>
     </header>
 
-    <main class="container">
-        <section class="audio-section card">
-            <h2>Listen to the Content</h2>
-            <div class="audio-controls">
-                <select id="textSelector">
-                    <option value="summary">Read Summary</option>
-                    <option value="transcript">Read Full Transcript</option>
-                </select>
-                <button id="playBtn" class="btn play">Play</button>
-                <button id="pauseBtn" class="btn pause">Pause</button>
-                <button id="stopBtn" class="btn stop">Stop</button>
-            </div>
-            <p id="audioStatus" class="status-text">Ready to play.</p>
-        </section>
-
-        <div class="grid-layout">
-            <section class="flowchart-section card">
-                <h2>Process Flowchart</h2>
-                <div class="flowchart">
-                    <div class="node color-1">
-                        <h3>1. Enter URL</h3>
-                        <p>User types web address into the browser.</p>
+    <main class="container hidden" id="results-container">
+        <div class="grid">
+            <section class="card">
+                <h2>Full Transcript</h2>
+                <div class="scroll-box" id="transcript-text">
                     </div>
-                    <div class="arrow"></div>
-                    <div class="node color-2">
-                        <h3>2. DNS Resolution</h3>
-                        <p>Browser finds the IP address matching the domain.</p>
-                    </div>
-                    <div class="arrow"></div>
-                    <div class="node color-3">
-                        <h3>3. TCP Connection</h3>
-                        <p>A secure connection is established with the server.</p>
-                    </div>
-                    <div class="arrow"></div>
-                    <div class="node color-4">
-                        <h3>4. HTTP Request</h3>
-                        <p>Browser asks the server for the website data.</p>
-                    </div>
-                    <div class="arrow"></div>
-                    <div class="node color-5">
-                        <h3>5. Render Page</h3>
-                        <p>HTML, CSS, and JS are painted onto the screen.</p>
-                    </div>
-                </div>
+                <button class="audio-btn" onclick="speakText('transcript-text')">Listen to Transcript</button>
             </section>
 
-            <section class="content-section">
-                <div class="card summary-card">
-                    <h2>Summary</h2>
-                    <p id="summaryText">
-                        The process of a web browser loading a page happens in five main steps. First, the user enters a URL. The browser then performs a DNS lookup to translate that URL into a server's IP address. Next, it establishes a secure TCP/IP connection with that server. Once connected, the browser sends an HTTP request for the web page's files. Finally, the server responds with the data, and the browser parses the HTML, CSS, and JavaScript to render the visual page on your screen.
-                    </p>
-                </div>
-
-                <div class="card transcript-card">
-                    <h2>Full Transcript</h2>
-                    <div id="transcriptText" class="transcript-content">
-                        <p>Welcome back to the channel. Today we're going to dive into exactly what happens behind the scenes when you type a web address into your browser and hit enter. It feels instant, but there is a massive journey happening in milliseconds.</p>
-                        <p>Step one is the URL. When you type 'example.com', your computer doesn't actually know where that is. Computers communicate using IP addresses, which are strings of numbers. So, the browser has to look up this address. This brings us to step two: DNS Resolution. The Domain Name System acts like the phonebook of the internet. Your browser checks its cache, your OS, your router, and finally a DNS server until it finds the matching IP address.</p>
-                        <p>Now that we have the IP address, we move to step three: The TCP connection. The browser uses the internet protocol to route packets to the server, and establishes a connection using a process called the TCP three-way handshake—essentially saying 'Hello, are you there?', the server replying 'Yes, I am', and the browser saying 'Great, let's talk'.</p>
-                        <p>Step four is the HTTP Request. Now that the connection is open, your browser sends a GET request to the server, asking for the specific web page. The server processes this request and sends back a response, usually starting with an HTML document.</p>
-                        <p>Finally, step five: Rendering. The browser receives the HTML and starts reading it. If it sees links to CSS stylesheets or JavaScript files, it requests those too. It builds the Document Object Model, calculates the styles, and paints the pixels onto your screen. And that is how a web browser works. Thanks for watching!</p>
+            <section class="card">
+                <h2>Detailed Summary</h2>
+                <div class="scroll-box" id="summary-text">
                     </div>
-                </div>
+                <button class="audio-btn" onclick="speakText('summary-text')">Listen to Summary</button>
             </section>
         </div>
+
+        <section class="card audio-controls">
+            <h2>Audio Playback Controls</h2>
+            <button onclick="pauseSpeech()" class="control-btn">Pause</button>
+            <button onclick="resumeSpeech()" class="control-btn">Resume</button>
+            <button onclick="stopSpeech()" class="control-btn stop-btn">Stop Audio</button>
+        </section>
+
+        <section class="card">
+            <h2>Concept Flowchart</h2>
+            <div id="flowchart-container" class="flowchart">
+                </div>
+        </section>
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!('speechSynthesis' in window)) {
-                alert("Sorry, your browser doesn't support text to speech!");
-                return;
-            }
 
-            const playBtn = document.getElementById('playBtn');
-            const pauseBtn = document.getElementById('pauseBtn');
-            const stopBtn = document.getElementById('stopBtn');
-            const textSelector = document.getElementById('textSelector');
-            const statusText = document.getElementById('audioStatus');
-            
-            let sentences = [];
-            let currentSentenceIndex = 0;
+        // Store the speech synthesis API instance
+const synth = window.speechSynthesis;
 
-            function getTextToRead() {
-                const elementId = textSelector.value === 'summary' ? 'summaryText' : 'transcriptText';
-                return document.getElementById(elementId).innerText;
-            }
+document.getElementById('process-btn').addEventListener('click', () => {
+    const url = document.getElementById('youtube-url').value;
+    
+    if (!url) {
+        alert("Please enter a YouTube link.");
+        return;
+    }
 
-            // Fix for the long text bug: chunking text into sentences
-            function prepareSpeechChunks(text) {
-                // Split text by common punctuation marks
-                sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-                currentSentenceIndex = 0;
-            }
+    // Show loading state (could be enhanced later)
+    document.getElementById('process-btn').innerText = "Analyzing...";
 
-            function speakNextChunk() {
-                if (currentSentenceIndex < sentences.length) {
-                    let utterance = new SpeechSynthesisUtterance(sentences[currentSentenceIndex].trim());
-                    utterance.rate = 0.95;
-                    
-                    utterance.onend = () => {
-                        currentSentenceIndex++;
-                        speakNextChunk(); // Chain the next sentence
-                    };
+    // SIMULATING an API Call to a backend. 
+    // In reality, you would use fetch() here to call your Node/Python server.
+    setTimeout(() => {
+        const mockData = generateMockData();
+        displayResults(mockData);
+        
+        document.getElementById('process-btn').innerText = "Analyze Video";
+        document.getElementById('results-container').classList.remove('hidden');
+    }, 1500); // 1.5 second simulated delay
+});
 
-                    utterance.onerror = (e) => {
-                        console.error("Speech error:", e);
-                        statusText.innerText = "Error playing audio.";
-                    };
+function displayResults(data) {
+    // 1. Inject Transcript
+    document.getElementById('transcript-text').innerText = data.transcript;
+    
+    // 2. Inject Summary
+    document.getElementById('summary-text').innerText = data.summary;
 
-                    window.speechSynthesis.speak(utterance);
-                    
-                    if(currentSentenceIndex === 0) {
-                        statusText.innerText = "Playing...";
-                    }
-                } else {
-                    statusText.innerText = "Finished playing.";
-                }
-            }
+    // 3. Generate Flowchart dynamically
+    const flowchartContainer = document.getElementById('flowchart-container');
+    flowchartContainer.innerHTML = ''; // Clear previous
 
-            playBtn.addEventListener('click', () => {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                    statusText.innerText = "Playing...";
-                } else if (!window.speechSynthesis.speaking) {
-                    prepareSpeechChunks(getTextToRead());
-                    speakNextChunk();
-                }
-            });
+    // Iterate through our steps and build HTML elements natively
+    data.flowchartSteps.forEach(step => {
+        const node = document.createElement('div');
+        node.className = 'flow-node';
+        node.innerText = step;
+        flowchartContainer.appendChild(node);
+    });
+}
 
-            pauseBtn.addEventListener('click', () => {
-                if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-                    window.speechSynthesis.pause();
-                    statusText.innerText = "Paused.";
-                }
-            });
+// --- Text-to-Speech Functions ---
 
-            stopBtn.addEventListener('click', () => {
-                window.speechSynthesis.cancel();
-                currentSentenceIndex = sentences.length; // Stop the chain
-                statusText.innerText = "Stopped.";
-            });
+function speakText(elementId) {
+    // Stop any current speech before starting a new one
+    synth.cancel();
+    
+    const textToRead = document.getElementById(elementId).innerText;
+    
+    if (textToRead.trim() === '') {
+        alert("There is no text to read.");
+        return;
+    }
 
-            textSelector.addEventListener('change', () => {
-                window.speechSynthesis.cancel();
-                currentSentenceIndex = sentences.length; // Stop the chain
-                statusText.innerText = "Selection changed. Ready to play.";
-            });
-            
-            window.addEventListener('beforeunload', () => {
-                window.speechSynthesis.cancel();
-            });
-        });
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    
+    // Optional: You can tweak the voice settings here
+    utterance.rate = 1; // Speed (0.1 to 10)
+    utterance.pitch = 1; // Pitch (0 to 2)
+
+    synth.speak(utterance);
+}
+
+function pauseSpeech() {
+    if (synth.speaking && !synth.paused) {
+        synth.pause();
+    }
+}
+
+function resumeSpeech() {
+    if (synth.paused) {
+        synth.resume();
+    }
+}
+
+function stopSpeech() {
+    synth.cancel();
+}
+
+// --- Mock Data Generator ---
+// This represents the data your future backend will return
+function generateMockData() {
+    return {
+        transcript: "Welcome to this tutorial. Today we are going to learn about photosynthesis. Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water. It generally involves the green pigment chlorophyll and generates oxygen as a byproduct. First, sunlight is captured by the leaves. Then, carbon dioxide enters the leaf through stomata. Water is absorbed from the roots. Finally, glucose is produced for energy, and oxygen is released into the air.",
+        summary: "This video explains the concept of photosynthesis. It breaks down how plants absorb sunlight, carbon dioxide, and water to produce glucose for energy and oxygen as a byproduct, highlighting the role of chlorophyll.",
+        flowchartSteps: [
+            "1. Plant leaves capture sunlight via chlorophyll",
+            "2. Leaves absorb Carbon Dioxide through stomata",
+            "3. Roots draw up Water from the soil",
+            "4. Chemical reaction creates Glucose (Energy)",
+            "5. Oxygen is released as a byproduct"
+        ]
+    };
+}
     </script>
 </body>
 </html>
