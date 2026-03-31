@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Video Analyzer</title>
     <style>
-
-        /* Base Resets and Typography */
+/* Base Resets and Typography */
 :root {
-    --bg-color: #f4f7f6;
     --text-main: #333;
-    --text-light: #666;
-    --primary: #4A90E2;
-    --primary-hover: #357ABD;
-    --card-bg: #ffffff;
+    --text-light: #555;
+    --primary: #667eea;
+    --primary-hover: #5a6cd6;
+    --card-bg: rgba(255, 255, 255, 0.95);
 }
 
 * {
@@ -22,10 +20,12 @@
     padding: 0;
 }
 
-/* Using native system fonts for great typography without CDNs */
+/* Full App Gradient Background */
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: var(--bg-color);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    /* Beautiful full-page gradient */
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    background-attachment: fixed;
     color: var(--text-main);
     line-height: 1.6;
     padding: 2rem;
@@ -39,14 +39,13 @@ body {
 .header {
     text-align: center;
     margin-bottom: 2rem;
+    color: #fff;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
 }
 
 .header h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-bottom: 0.5rem;
-    background: linear-gradient(90deg, #4A90E2, #9013FE);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .input-group {
@@ -59,20 +58,16 @@ body {
 input[type="text"] {
     width: 60%;
     max-width: 500px;
-    padding: 12px 20px;
-    border: 2px solid #ddd;
+    padding: 14px 20px;
+    border: none;
     border-radius: 8px;
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.3s;
-}
-
-input[type="text"]:focus {
-    border-color: var(--primary);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 button {
-    padding: 12px 24px;
+    padding: 14px 24px;
     background-color: var(--primary);
     color: white;
     border: none;
@@ -80,11 +75,13 @@ button {
     font-size: 1rem;
     cursor: pointer;
     font-weight: 600;
-    transition: background-color 0.3s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 button:hover {
-    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 /* Layout & Cards */
@@ -112,28 +109,31 @@ button:hover {
     background: var(--card-bg);
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
 }
 
 .card h2 {
     margin-bottom: 1rem;
     font-size: 1.4rem;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid #eee;
     padding-bottom: 0.5rem;
+    color: var(--primary);
 }
 
 .scroll-box {
-    max-height: 300px;
+    max-height: 250px;
     overflow-y: auto;
     padding-right: 10px;
     color: var(--text-light);
     margin-bottom: 1.5rem;
+    font-size: 0.95rem;
 }
 
 /* Audio Controls */
 .audio-btn {
     width: 100%;
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .audio-controls {
@@ -141,24 +141,17 @@ button:hover {
 }
 
 .control-btn {
-    background-color: #eee;
+    background-color: #f0f0f0;
     color: #333;
     margin: 0 5px;
-}
-
-.control-btn:hover {
-    background-color: #ddd;
 }
 
 .stop-btn {
     background-color: #ff5252;
     color: white;
 }
-.stop-btn:hover {
-    background-color: #d32f2f;
-}
 
-/* Custom Pure CSS Flowchart */
+/* Complementing Solid Color Flowchart */
 .flowchart {
     display: flex;
     flex-direction: column;
@@ -168,28 +161,30 @@ button:hover {
 }
 
 .flow-node {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    color: #004d40;
+    /* Complementing deep blue/indigo */
+    background: #4a5568; 
+    color: #ffffff;
     padding: 15px 25px;
     border-radius: 8px;
-    font-weight: bold;
+    font-weight: 500;
     text-align: center;
     width: 80%;
     max-width: 400px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     position: relative;
+    border: 2px solid #2d3748;
 }
 
-/* Create the down arrow between nodes natively */
+/* Down arrow natively in CSS */
 .flow-node:not(:last-child)::after {
     content: '';
     position: absolute;
-    bottom: -20px;
+    bottom: -22px;
     left: 50%;
     transform: translateX(-50%);
     border-width: 10px;
     border-style: solid;
-    border-color: #ccc transparent transparent transparent;
+    border-color: #4a5568 transparent transparent transparent;
 }
     </style>
 </head>
@@ -235,11 +230,9 @@ button:hover {
     </main>
 
     <script>
+        const synth = window.speechSynthesis;
 
-        // Store the speech synthesis API instance
-const synth = window.speechSynthesis;
-
-document.getElementById('process-btn').addEventListener('click', () => {
+document.getElementById('process-btn').addEventListener('click', async () => {
     const url = document.getElementById('youtube-url').value;
     
     if (!url) {
@@ -247,32 +240,45 @@ document.getElementById('process-btn').addEventListener('click', () => {
         return;
     }
 
-    // Show loading state (could be enhanced later)
-    document.getElementById('process-btn').innerText = "Analyzing...";
+    const processBtn = document.getElementById('process-btn');
+    processBtn.innerText = "Analyzing...";
 
-    // SIMULATING an API Call to a backend. 
-    // In reality, you would use fetch() here to call your Node/Python server.
+    /* ===============================================================
+      REAL API FETCH LOGIC (Currently commented out)
+      When you build your backend (Node.js/Python), uncomment this:
+      ===============================================================
+      
+      try {
+          const response = await fetch('http://localhost:3000/api/analyze', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ videoUrl: url })
+          });
+          const realData = await response.json();
+          displayResults(realData);
+      } catch (error) {
+          alert("Error fetching data from server.");
+          console.error(error);
+      }
+    */
+
+    // Using Mock Data for frontend testing until you have a backend
     setTimeout(() => {
         const mockData = generateMockData();
         displayResults(mockData);
         
-        document.getElementById('process-btn').innerText = "Analyze Video";
+        processBtn.innerText = "Analyze Video";
         document.getElementById('results-container').classList.remove('hidden');
-    }, 1500); // 1.5 second simulated delay
+    }, 1500); 
 });
 
 function displayResults(data) {
-    // 1. Inject Transcript
     document.getElementById('transcript-text').innerText = data.transcript;
-    
-    // 2. Inject Summary
     document.getElementById('summary-text').innerText = data.summary;
 
-    // 3. Generate Flowchart dynamically
     const flowchartContainer = document.getElementById('flowchart-container');
-    flowchartContainer.innerHTML = ''; // Clear previous
+    flowchartContainer.innerHTML = ''; 
 
-    // Iterate through our steps and build HTML elements natively
     data.flowchartSteps.forEach(step => {
         const node = document.createElement('div');
         node.className = 'flow-node';
@@ -281,26 +287,31 @@ function displayResults(data) {
     });
 }
 
-// --- Text-to-Speech Functions ---
+// --- SMOOTH Text-to-Speech Functions ---
 
 function speakText(elementId) {
-    // Stop any current speech before starting a new one
-    synth.cancel();
+    synth.cancel(); // Stop current speech
     
     const textToRead = document.getElementById(elementId).innerText;
     
-    if (textToRead.trim() === '') {
+    if (!textToRead) {
         alert("There is no text to read.");
         return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(textToRead);
+    // FIX FOR CHOPPY AUDIO: Split text into sentences (chunks)
+    // This regular expression splits text by periods, exclamation marks, or question marks
+    const chunks = textToRead.match(/[^.!?]+[.!?]+/g) || [textToRead];
     
-    // Optional: You can tweak the voice settings here
-    utterance.rate = 1; // Speed (0.1 to 10)
-    utterance.pitch = 1; // Pitch (0 to 2)
-
-    synth.speak(utterance);
+    chunks.forEach(chunk => {
+        const utterance = new SpeechSynthesisUtterance(chunk.trim());
+        
+        utterance.rate = 0.9; // Slightly slower for better comprehension
+        utterance.pitch = 1;
+        
+        // Queue the chunks up for smooth, continuous playback
+        synth.speak(utterance);
+    });
 }
 
 function pauseSpeech() {
@@ -320,7 +331,6 @@ function stopSpeech() {
 }
 
 // --- Mock Data Generator ---
-// This represents the data your future backend will return
 function generateMockData() {
     return {
         transcript: "Welcome to this tutorial. Today we are going to learn about photosynthesis. Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water. It generally involves the green pigment chlorophyll and generates oxygen as a byproduct. First, sunlight is captured by the leaves. Then, carbon dioxide enters the leaf through stomata. Water is absorbed from the roots. Finally, glucose is produced for energy, and oxygen is released into the air.",
